@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryColumn } from 'typeorm';
 import { Expose } from 'class-transformer';
-import { IsEmpty, IsNotEmpty, IsString, Min } from 'class-validator';
+import { IsNotEmpty, IsString, MinLength } from 'class-validator';
 import { uuid } from '@utils/uuid';
 
 @Entity()
@@ -11,19 +11,22 @@ export class UserEntity {
 
   @Column()
   @Expose()
+  @IsNotEmpty()
   name: string;
 
   @Column()
   @Expose()
+  @IsNotEmpty()
   username: string;
 
   @Column()
   @Expose()
-  @IsEmpty()
+  @IsNotEmpty()
   password: string;
 
   @Column()
   @Expose()
+  @IsNotEmpty()
   isRoot: boolean;
 
   @Column()
@@ -33,6 +36,10 @@ export class UserEntity {
   @Column()
   @Expose()
   createdAt: string;
+
+  @Column()
+  @Expose()
+  updatedAt: string;
 
   constructor(props: Partial<UserEntity>) {
     Object.assign(this, props);
@@ -51,7 +58,7 @@ export class UserInput {
 
   @Expose()
   @IsString()
-  @Min(6)
+  @MinLength(6)
   @IsNotEmpty()
   username: string;
 }
@@ -59,7 +66,7 @@ export class UserInput {
 export class UserLogin extends UserInput {
   @Expose()
   @IsString()
-  @Min(8)
+  @MinLength(8)
   @IsNotEmpty()
   password: string;
 }

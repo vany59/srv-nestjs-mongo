@@ -7,9 +7,6 @@ import { Auth, UserId } from '@decorator';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post('login')
-  login(@Body() body: any, @Res() res: Response) {}
-
   @Post('create')
   createUser(@Body() body: any, @Res() res: Response) {}
 
