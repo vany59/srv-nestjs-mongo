@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { IdDto } from '@utils/dto';
 import { AuthService } from '@app/auth/auth.service';
 
-import { UserEntity } from './user.dto';
+import { UserCreate, UserEntity } from './user.dto';
 import { UserInput, UserLogin } from './user.dto';
 
 @Injectable()
@@ -20,9 +20,15 @@ export class UserService {
 
   async login(input: UserLogin): Promise<any> {}
 
-  async create(user: UserInput): Promise<IdDto> {
+  async create(user: UserCreate): Promise<IdDto> {
+    const {username, password} = user
+    const hashPassword = await this.authService.hashPassword(password)
+    const checkUser = await this.userRepository.findOne({username})
+    if(checkUser) throw new Error('User existed')
+      const newUser = await this.userRepository.save(new UserEntity({...user, password: hashPassword}))
+    console.log(newUser)
     return {
-      id: 'id',
+      id: newUser._id,
     };
   }
 

@@ -35,6 +35,15 @@ export class ConfigurationService {
   public getUploadDest() {
     return this.configService.get('UPLOAD_DEST');
   }
+  
+  public getSecurityConfig(){
+    return {
+      accessExp: this.configService.get<number>('ACCESS_EXP'),
+      refreshExp: this.configService.get<number>('REFRESH_EXP'),
+      passwordSalt: this.configService.get('PASSWORD_HASH_SALT'),
+      tokenSecret: this.configService.get('TOKEN_ENCRYPT_SECRET')
+    }
+  }
 
   /**
    * @description This function return defined password salt

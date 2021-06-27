@@ -2,13 +2,20 @@ import { Body, Controller, Get, Post, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { UserService } from './user.service';
 import { Auth, UserId } from '@decorator';
+import { UserCreate } from './user.dto';
+import { IdDto } from '@utils/dto';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post('create')
-  createUser(@Body() body: any, @Res() res: Response) {}
+  async createUser(@Body() body: UserCreate) {
+    this.userService.create(body)
+    return {
+      id: '123'
+    }
+  }
 
   @Get('me')
   @Auth()

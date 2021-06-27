@@ -4,6 +4,8 @@ export interface EnvironmentKeys {
   HOST: string;
   NAME: string;
 
+  ACCESS_EXP: number;
+  REFRESH_EXP: number;
   PASSWORD_HASH_SALT: number;
   TOKEN_ENCRYPT_SECRET: string;
 
