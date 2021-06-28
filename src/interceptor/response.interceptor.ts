@@ -23,9 +23,9 @@ export class ResponseInterceptor implements NestInterceptor {
     return next.handle().pipe(
       map((res) => {
         try {
-          const { data, message } = res;
-          if (message) response.message = message;
-          if (!response.data) response.data = data;
+          if (res.message) response.message = res.message;
+          if (!res.data) response.data = res.data;
+          if((typeof res) !== "object" || !res.message) response.data = res
           return response;
         } catch (_) {
           response.data = res;

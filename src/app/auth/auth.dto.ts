@@ -25,13 +25,25 @@ export class GetToken {
   password: string;
 }
 
-export class TokenRes {
-  @Expose()
-  userId: string;
-
+export class UToken {
   @Expose()
   accessToken: string;
 
   @Expose()
   refreshToken: string;
+}
+
+export class TokenRes extends UToken {
+  @Expose()
+  userId: string;
+}
+
+export class Token {
+  @Expose()
+  @IsString()
+  _id: string
+
+  @Expose()
+  @IsString()
+  username: string
 }

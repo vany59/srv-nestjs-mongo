@@ -15,13 +15,19 @@ export class UserEntity {
 
   @Column()
   @Expose()
-  @IsNotEmpty()
   username: string;
 
   @Column()
   @Expose()
-  @IsNotEmpty()
   password: string;
+  
+  @Column()
+  @Expose()
+  accessToken: string;
+
+  @Column()
+  @Expose()
+  refreshToken: string;
 
   @Column()
   @Expose()
