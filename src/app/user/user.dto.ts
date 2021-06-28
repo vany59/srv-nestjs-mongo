@@ -20,7 +20,7 @@ export class UserEntity {
   @Column()
   @Expose()
   password: string;
-  
+
   @Column()
   @Expose()
   accessToken: string;
@@ -61,9 +61,6 @@ export class UserEntity {
 
 export class UserInput {
   @Expose()
-  name: string;
-
-  @Expose()
   @IsString()
   @MinLength(6)
   @IsNotEmpty()
@@ -79,3 +76,27 @@ export class UserLogin extends UserInput {
 }
 
 export class UserCreate extends UserLogin {}
+
+export class LoginRes extends UserInput {
+  @Expose()
+  @IsString()
+  @IsNotEmpty()
+  _id: string;
+
+  @Expose()
+  @IsString()
+  @IsNotEmpty()
+  accessToken: string;
+
+  @Expose()
+  @IsString()
+  @IsNotEmpty()
+  refreshToken: string;
+}
+
+export class RefreshTokenInput {
+  @Expose()
+  @IsString()
+  @IsNotEmpty()
+  refreshToken: string;
+}

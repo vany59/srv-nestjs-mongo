@@ -4,6 +4,8 @@ import {
   ExecutionContext,
   Logger,
   Inject,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthService } from './auth.service';
@@ -21,14 +23,21 @@ export class AuthGuard implements CanActivate {
       'auth',
       context.getHandler(),
     );
+
     const logger = new Logger('Guard');
+
     if (!requiredAuth) {
       return true;
     }
+
     const request = context.switchToHttp().getRequest();
     const { authorization } = request.headers;
-    if (!authorization) return false;
-    const token = authorization.split(' ')[1];
+    if (!authorization)
+      throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+
+    const token = authorization.replace('Bearer ', '');
+    if (!token)
+      throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
     try {
       const data = await this.authService.verifyToken(token);
       request.userId = data._id;

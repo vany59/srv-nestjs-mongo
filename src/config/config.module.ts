@@ -28,8 +28,8 @@ const ConfigModule = NestConfigModule.forRoot({
         NAME: process.env.NAME || 'CODEBASE',
 
         //security
-        ACCESS_EXP: parseInt(process.env.ACCESS_EXP) || 100,
-        REFRESH_EXP: parseInt(process.env.REFRESH_EXP) || 3600,
+        ACCESS_EXP: parseInt(process.env.ACCESS_EXP) || 10, // 1 day
+        REFRESH_EXP: parseInt(process.env.REFRESH_EXP) || 54000, // 15 day
         PASSWORD_HASH_SALT: parseInt(process.env.PASSWORD_HASH_SALT) || 11,
         TOKEN_ENCRYPT_SECRET: process.env.TOKEN_ENCRYPT_SECRET || 's3cr3t!@#',
 
