@@ -15,4 +15,9 @@ export interface EnvironmentKeys {
   DB_PASSWORD: string;
   DB_DATABASE: string;
   UPLOAD_DEST: string;
+
+  REDIS_HOST: string;
+  REDIS_PORT: number;
+  REDIS_PASS: string;
+  CACHE_TTL: number;
 }

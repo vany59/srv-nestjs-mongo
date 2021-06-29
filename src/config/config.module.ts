@@ -42,6 +42,12 @@ const ConfigModule = NestConfigModule.forRoot({
 
         //upload
         UPLOAD_DEST: process.env.UPLOAD_DEST || 'uploads',
+
+        //redis cache
+        REDIS_HOST: process.env.REDIS_HOST || 'localhost',
+        REDIS_PASS: process.env.REDIS_PASS || '123456',
+        REDIS_PORT: parseInt(process.env.REDIS_PORT) || 6379,
+        CACHE_TTL: parseInt(process.env.CACHE_TTL) || 3600,
       };
     },
   ],
