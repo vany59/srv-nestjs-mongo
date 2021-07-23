@@ -41,9 +41,9 @@ export class TokenRes extends UToken {
 export class Token {
   @Expose()
   @IsString()
-  _id: string
+  _id: string;
 
   @Expose()
   @IsString()
-  username: string
+  username: string;
 }

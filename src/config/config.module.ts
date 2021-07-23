@@ -1,8 +1,5 @@
 import { Global, Module } from '@nestjs/common';
-import {
-  ConfigModule as NestConfigModule,
-  ConfigService,
-} from '@nestjs/config';
+import { ConfigModule as NestConfigModule } from '@nestjs/config';
 import { EnvironmentKeys } from './environment.interface';
 import { ConfigurationService } from './config.service';
 
@@ -11,6 +8,7 @@ const ConfigModule = NestConfigModule.forRoot({
   envFilePath: '.env',
   load: [
     (): EnvironmentKeys => {
+      //validate
       if (
         process.env.PASSOWRD_HASH_SALT &&
         isNaN(parseInt(process.env.PASSWORD_HASH_SALT))
@@ -20,6 +18,12 @@ const ConfigModule = NestConfigModule.forRoot({
         );
         process.exit(1);
       }
+
+      if (process.env.PORT && isNaN(parseInt(process.env.PORT))) {
+        console.error('PORT must be a number or leave it as default');
+        process.exit(1);
+      }
+
       return {
         //app
         PORT: parseInt(process.env.PORT) || 8080,
@@ -48,6 +52,10 @@ const ConfigModule = NestConfigModule.forRoot({
         REDIS_PASS: process.env.REDIS_PASS || '123456',
         REDIS_PORT: parseInt(process.env.REDIS_PORT) || 6379,
         CACHE_TTL: parseInt(process.env.CACHE_TTL) || 3600,
+
+        //seeding
+        ROOT_USER: process.env.ROOT_USER || 'root',
+        ROOT_PASSWORD: process.env.ROOT_PASSWORD || '123456',
       };
     },
   ],

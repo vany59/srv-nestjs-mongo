@@ -35,26 +35,28 @@ export class ConfigurationService {
   public getUploadDest() {
     return this.configService.get('UPLOAD_DEST');
   }
-  
-  public getSecurityConfig(){
+
+  public getSecurityConfig() {
     return {
       accessExp: this.configService.get<number>('ACCESS_EXP'),
       refreshExp: this.configService.get<number>('REFRESH_EXP'),
       passwordSalt: this.configService.get('PASSWORD_HASH_SALT'),
-      tokenSecret: this.configService.get('TOKEN_ENCRYPT_SECRET')
-    }
+      tokenSecret: this.configService.get('TOKEN_ENCRYPT_SECRET'),
+    };
   }
 
-  /**
-   * @description This function return defined password salt
-   * used when hash password
-   * @returns number
-   */
   public getPasswordHashSalt() {
     return this.configService.get<number>('PASSWORD_HASH_SALT');
   }
 
   public getTokenEncryptSecret() {
     return this.configService.get<string>('TOKEN_ENCRYPT_SECRET');
+  }
+
+  public getSeeding() {
+    return {
+      rootUser: this.configService.get<string>('ROOT_USER'),
+      rootPassword: this.configService.get<string>('ROOT_PASSWORD'),
+    };
   }
 }

@@ -20,4 +20,7 @@ export interface EnvironmentKeys {
   REDIS_PORT: number;
   REDIS_PASS: string;
   CACHE_TTL: number;
+
+  ROOT_USER: string;
+  ROOT_PASSWORD: string;
 }
