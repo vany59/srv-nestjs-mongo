@@ -18,7 +18,8 @@
       "@decorator": ["./src/decorator"],
       "@srv-auth/*": ["./src/srv-auth/*"],
       "@srv-account/*": ["./src/srv-account/*"],
-      "@srv-constant/*": ["./src/srv-constant/*"]
+      "@srv-constant/*": ["./src/srv-constant/*"],
+      "@srv-app/*": ["./src/srv-app/*"]
     }
   },
   "include": ["src"],
