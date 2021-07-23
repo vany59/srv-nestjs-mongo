@@ -16,8 +16,18 @@ import AppInterceptor from './interceptor';
 
 import * as App from './app';
 import { SrvConstantModule } from './srv-constant/srvConstant.module';
+import { SrvAccountModule } from './srv-account/srvAccount.module';
+import { SrvAuthModule } from './srv-auth/srvAuth.module';
 
 const routes: Routes = [
+  {
+    path: '/srv-account',
+    module: SrvAccountModule,
+  },
+  {
+    path: '/srv-auth',
+    module: SrvAuthModule,
+  },
   {
     path: '/srv-constant',
     module: SrvConstantModule,
@@ -29,6 +39,8 @@ const routes: Routes = [
     RouterModule.forRoutes(routes),
     ConfigurationModule,
     RedisCacheModule,
+    SrvAccountModule,
+    SrvAuthModule,
     SrvConstantModule,
     DatabaseModule,
     ...Object.values(App),
