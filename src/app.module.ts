@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
-import { RouterModule, Routes } from 'nest-router';
 
 import { AppService } from './app.service';
 
@@ -15,21 +14,11 @@ import { MyLogger } from './MyLogger';
 import AppInterceptor from './interceptor';
 
 import * as App from './app';
-import { SrvConstantModule } from './srv-constant/srvConstant.module';
-
-const routes: Routes = [
-  {
-    path: '/srv-constant',
-    module: SrvConstantModule,
-  },
-];
 
 @Module({
   imports: [
-    RouterModule.forRoutes(routes),
     ConfigurationModule,
     RedisCacheModule,
-    SrvConstantModule,
     DatabaseModule,
     ...Object.values(App),
   ],

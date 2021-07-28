@@ -4,9 +4,9 @@ import ConfigurationModule from '@config/config.module';
 import { DatabaseModule } from '../database/database.module';
 import { SeederService } from './seeder.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ProvinceEntity } from '@srv-constant/province/province.dto';
-import { DistrictEntity } from '@srv-constant/district/district.dto';
-import { WardEntity } from '@srv-constant/ward/ward.dto';
+import { ProvinceEntity } from '@app/constant/province/province.dto';
+import { DistrictEntity } from '@app/constant/district/district.dto';
+import { WardEntity } from '@app/constant/ward/ward.dto';
 
 @Module({
   imports: [

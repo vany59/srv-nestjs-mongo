@@ -1,5 +1,39 @@
+import { BaseEntity } from '@utils/dto';
 import { Expose } from 'class-transformer';
-import { IsNotEmpty, IsString, Min, MinLength } from 'class-validator';
+import { IsNotEmpty, IsString, MinLength } from 'class-validator';
+import { Column, Entity } from 'typeorm';
+
+@Entity({ name: 'auth' })
+export class AuthEntity extends BaseEntity {
+  @Column()
+  @IsString()
+  userId: string;
+
+  @Column()
+  @IsString()
+  @Expose()
+  accessToken: string;
+
+  @Column({ type: 'date' })
+  @IsString()
+  @Expose()
+  accessTokenExpiresAt: string;
+
+  @Column({ type: 'string', default: '12312323' })
+  @IsString()
+  @Expose()
+  refreshToken: string;
+
+  @Column({ type: 'date' })
+  @IsString()
+  @Expose()
+  refreshTokenExpiresAt: string;
+
+  @Column()
+  @IsString()
+  @Expose()
+  scope: string;
+}
 
 export class AuthDto {
   @Expose()
