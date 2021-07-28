@@ -14,7 +14,6 @@ import { MyLogger } from './MyLogger';
 import AppInterceptor from './interceptor';
 
 import * as App from './app';
-
 @Module({
   imports: [
     ConfigurationModule,

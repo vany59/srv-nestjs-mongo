@@ -1,5 +1,6 @@
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigurationService } from '@config/config.service';
+import { getMetadataArgsStorage } from 'typeorm';
 
 const DatabaseModule = TypeOrmModule.forRootAsync({
   imports: [ConfigurationService],
@@ -10,13 +11,19 @@ const DatabaseModule = TypeOrmModule.forRootAsync({
     return {
       type: 'mongodb',
       url: connectUrl,
-      entities: [
-        __dirname + '/../app/**/*.entity{.ts,.js}',
-        __dirname + '/../app/**/*.dto{.ts,.js}',
-        __dirname + '/../srv-constant/**/*.dto{.ts,.js}',
-        __dirname + '/../srv-constant/**/*.dto{.ts,.js}',
-        __dirname + '/../srv-constant/*.dto{.ts,.js}',
-      ],
+      entities: getMetadataArgsStorage().tables.map((tbl) => tbl.target),
+      // entities: [
+      //   __dirname + '/../app/**/*.entity{.ts,.js}',
+      //   __dirname + '/../app/**/*.dto{.ts,.js}',
+      //   __dirname + '/../srv-account/**/*.dto{.ts,.js}',
+      //   __dirname + '/../srv-account/*.dto{.ts,.js}',
+      //   __dirname + '/../srv-auth/**/*.dto{.ts,.js}',
+      //   __dirname + '/../srv-auth/*.dto{.ts,.js}',
+      //   __dirname + '/../srv-constant/**/*.dto{.ts,.js}',
+      //   __dirname + '/../srv-constant/*.dto{.ts,.js}',
+      //   __dirname + '/../srv-app/**/*.dto{.ts,.js}',
+      //   __dirname + '/../srv-app/*.dto{.ts,.js}',
+      // ],
       synchronize: process.env.NODE_ENV === 'production' ? false : true,
       useUnifiedTopology: true,
     };
