@@ -1,0 +1,8 @@
+{
+  "code": {
+    "200": "success",
+    "401": "unauthorized",
+    "400": "bad request",
+    "500": "error"
+  }
+}

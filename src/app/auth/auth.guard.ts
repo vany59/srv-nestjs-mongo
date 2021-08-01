@@ -8,7 +8,22 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import langTransformer from 'src/language';
 import { AuthService } from './auth.service';
+
+const authError = (code: number, lang: string) => {
+  return new HttpException(
+    {
+      code: code,
+      message: langTransformer({
+        query: `code.${code}`,
+        lang,
+      }),
+      data: null,
+    },
+    HttpStatus.OK,
+  );
+};
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -31,19 +46,19 @@ export class AuthGuard implements CanActivate {
     }
 
     const request = context.switchToHttp().getRequest();
+    const lang = request.headers['accept-language'];
     const { authorization } = request.headers;
-    if (!authorization)
-      throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+    if (!authorization) throw authError(HttpStatus.UNAUTHORIZED, lang);
 
     const token = authorization.replace('Bearer ', '');
-    if (!token)
-      throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+    if (!token) throw authError(HttpStatus.UNAUTHORIZED, lang);
+
     try {
       const data = await this.authService.verifyToken(token);
       request.userId = data._id;
       return true;
     } catch (e) {
-      return false;
+      throw authError(HttpStatus.BAD_REQUEST, lang);
     }
   }
 }
