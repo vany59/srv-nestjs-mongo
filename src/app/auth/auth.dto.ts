@@ -33,6 +33,11 @@ export class AuthEntity extends BaseEntity {
   @IsString()
   @Expose()
   scope: string;
+
+  constructor(props: Partial<AuthEntity>) {
+    super(props);
+    Object.assign(this, props);
+  }
 }
 
 export class AuthDto {

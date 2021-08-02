@@ -1,9 +1,12 @@
 import { Auth } from '@decorator';
-import { Body, Controller, Get, Post } from '@nestjs/common';
-import { CreateCat } from './cat.dto';
+import { Body, Controller, Get, Post, Req } from '@nestjs/common';
+import { CatEntity, CreateCat } from './cat.dto';
+import { catService } from './cat.service';
 
 @Controller('cat')
 export class CatController {
+  constructor(private readonly catService: catService) {}
+
   @Get()
   cats() {
     return { data: 123 };
@@ -27,5 +30,10 @@ export class CatController {
     return {
       data: 'auth',
     };
+  }
+
+  @Post('/createdb')
+  createDb(@Body() body: CreateCat) {
+    this.catService.createCat(body.name);
   }
 }

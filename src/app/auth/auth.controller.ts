@@ -1,7 +1,7 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MongoRepository } from 'typeorm';
-import { AuthEntity, Token } from './auth.dto';
+import { AuthEntity, GetToken, Token } from './auth.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -10,8 +10,8 @@ export class AuthController {
     private readonly authRepo: MongoRepository<AuthEntity>,
   ) {}
 
-  @Post('oauth/token')
-  async token() {
+  @Post('oauth2/token')
+  async token(@Body() body: GetToken) {
     return {
       token: '',
     };

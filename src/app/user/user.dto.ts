@@ -1,10 +1,16 @@
-import { Entity, Column, PrimaryColumn, ObjectIdColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryColumn,
+  ObjectIdColumn,
+  BaseEntity,
+} from 'typeorm';
 import { Expose } from 'class-transformer';
 import { IsNotEmpty, IsString, MinLength } from 'class-validator';
 import { uuid } from '@utils/uuid';
 
 @Entity()
-export class UserEntity {
+export class UserEntity extends BaseEntity {
   @ObjectIdColumn()
   @Expose()
   _id: string;
@@ -20,14 +26,6 @@ export class UserEntity {
   @Column()
   @Expose()
   password: string;
-
-  @Column()
-  @Expose()
-  accessToken: string;
-
-  @Column()
-  @Expose()
-  refreshToken: string;
 
   @Column()
   @Expose()
@@ -50,53 +48,8 @@ export class UserEntity {
   updatedAt: string;
 
   constructor(props: Partial<UserEntity>) {
+    super();
     Object.assign(this, props);
-    this._id = this._id || uuid();
-    this.isActive = this.isActive || true;
     this.isRoot = this.isRoot || false;
-    this.isDeleted = this.isDeleted || false;
-    this.createdAt = this.createdAt || (+new Date()).toString();
   }
-}
-
-export class UserInput {
-  @Expose()
-  @IsString()
-  @MinLength(6)
-  @IsNotEmpty()
-  username: string;
-}
-
-export class UserLogin extends UserInput {
-  @Expose()
-  @IsString()
-  @MinLength(8)
-  @IsNotEmpty()
-  password: string;
-}
-
-export class UserCreate extends UserLogin {}
-
-export class LoginRes extends UserInput {
-  @Expose()
-  @IsString()
-  @IsNotEmpty()
-  _id: string;
-
-  @Expose()
-  @IsString()
-  @IsNotEmpty()
-  accessToken: string;
-
-  @Expose()
-  @IsString()
-  @IsNotEmpty()
-  refreshToken: string;
-}
-
-export class RefreshTokenInput {
-  @Expose()
-  @IsString()
-  @IsNotEmpty()
-  refreshToken: string;
 }
