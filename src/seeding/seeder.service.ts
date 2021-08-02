@@ -9,6 +9,7 @@ import { WardEntity } from '@app/constant/ward/ward.dto';
 import { Province } from './db/province';
 import { District } from './db/district';
 import { Ward } from './db/ward';
+import { ConfigurationService } from '@config/config.service';
 
 @Injectable()
 export class SeederService {
@@ -21,11 +22,26 @@ export class SeederService {
 
     @InjectRepository(WardEntity)
     private readonly wardRepository: MongoRepository<WardEntity>,
+
+    private readonly configService: ConfigurationService,
   ) {}
 
   async seed() {
-    await this.provinceRepository.insertMany(Province);
-    await this.districtRepository.insertMany(District);
-    await this.wardRepository.insertMany(Ward);
+    //province
+    if ((await this.provinceRepository.find()).length) {
+      await this.provinceRepository.insertMany(Province);
+    }
+
+    //district
+    if ((await this.districtRepository.find()).length) {
+      await this.districtRepository.insertMany(District);
+    }
+
+    //ward
+    if ((await this.wardRepository.find()).length) {
+      await this.wardRepository.insertMany(Ward);
+    }
+
+    //user
   }
 }

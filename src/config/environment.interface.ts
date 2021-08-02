@@ -3,6 +3,7 @@ export interface EnvironmentKeys {
   PREFIX: string;
   HOST: string;
   NAME: string;
+  SCOPE: string;
 
   ACCESS_EXP: number;
   REFRESH_EXP: number;

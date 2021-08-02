@@ -30,6 +30,7 @@ const ConfigModule = NestConfigModule.forRoot({
         PREFIX: process.env.PREFIX || 'api',
         HOST: process.env.HOST || 'http://localhost',
         NAME: process.env.NAME || 'CODEBASE',
+        SCOPE: process.env.SCOPE || 'srv-nestjs-base',
 
         //security
         ACCESS_EXP: parseInt(process.env.ACCESS_EXP) || 10, // 1 day

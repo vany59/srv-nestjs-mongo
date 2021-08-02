@@ -14,20 +14,20 @@ export class AuthEntity extends BaseEntity {
   @Expose()
   accessToken: string;
 
-  @Column({ type: 'date' })
+  @Column()
   @IsString()
   @Expose()
-  accessTokenExpiresAt: string;
+  accessTokenExpiresAt: Date;
 
-  @Column({ type: 'string', default: '12312323' })
+  @Column()
   @IsString()
   @Expose()
   refreshToken: string;
 
-  @Column({ type: 'date' })
+  @Column()
   @IsString()
   @Expose()
-  refreshTokenExpiresAt: string;
+  refreshTokenExpiresAt: Date;
 
   @Column()
   @IsString()

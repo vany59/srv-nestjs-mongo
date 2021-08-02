@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { sign, verify } from 'jsonwebtoken';
 import { compare, hash } from 'bcrypt';
 import { ConfigurationService } from '@config/config.service';

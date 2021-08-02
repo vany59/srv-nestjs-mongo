@@ -12,6 +12,8 @@ export class ConfigurationService {
       host: this.configService.get('HOST'),
       name: this.configService.get('NAME'),
       prefix: this.configService.get('PREFIX'),
+      scope: this.configService.get('SCOPE'),
+      apiLocal: `http://localhost:${this.configService.get('PORT')}`,
     };
   }
 
