@@ -25,4 +25,25 @@ export class UserService {
     const user = await this.findOne({ username, phone });
     if (user) return { code: 409, message: 'user.conflict' };
   }
+
+  async save(data) {
+    try {
+      const { username, phone } = data;
+      const user = await this.findOne({ username, phone });
+      if (user) throw { code: 409, message: 'user.conflict' };
+
+      const _data = new UserEntity(data);
+      if (data._id) {
+        return {
+          data: await this.userRepo.update({ _id: data._id }, _data),
+        };
+      } else {
+        return {
+          data: await this.userRepo.save(_data),
+        };
+      }
+    } catch (e) {
+      throw e;
+    }
+  }
 }

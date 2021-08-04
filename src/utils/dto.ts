@@ -11,30 +11,41 @@ export class IdDto {
 }
 export abstract class BaseEntity {
   @ObjectIdColumn()
-  @IsString()
   @Expose()
-  _id: string;
+  _id?: string;
 
   @Column()
-  @IsString()
   @Expose()
-  createdAt: Date;
+  createdAt?: Date;
 
   @Column()
-  @IsString()
   @Expose()
-  updatedAt: Date;
+  createdBy?: string;
 
   @Column()
-  @IsBoolean()
   @Expose()
-  isDeleted: boolean;
+  updatedAt?: Date;
+
+  @Column()
+  @Expose()
+  updatedBy?: string;
+
+  @Column()
+  @Expose()
+  isDeleted?: boolean;
+
+  @Column()
+  @Expose()
+  deletedBy?: string;
 
   constructor(props: Partial<BaseEntity>) {
     Object.assign(this, props);
     this._id = this._id || uuid();
     this.isDeleted = this.isDeleted || false;
-    this.createdAt = new Date();
+    this.createdAt = this.createdAt || new Date();
+    this.createdBy = this.createdBy || 'system';
     this.updatedAt = new Date();
+    this.updatedBy = this.updatedBy || 'system';
+    this.deletedBy = this.deletedBy || '';
   }
 }

@@ -1,8 +1,6 @@
 import { Register } from '@app/user/user.dto';
 import { Body, Controller, Post } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { MongoRepository } from 'typeorm';
-import { AuthEntity, GetToken } from './auth.dto';
+import { GetToken } from './auth.dto';
 import { AuthService } from './auth.service';
 
 @Controller('auth')
@@ -15,5 +13,7 @@ export class AuthController {
   }
 
   @Post('/register')
-  async register(@Body() body: Register) {}
+  async register(@Body() body: Register) {
+    return await this.authService.register(body);
+  }
 }

@@ -38,8 +38,17 @@ export class ResponseInterceptor implements NestInterceptor {
           } else {
             response.message = langTransformer({ query: `code.${code}`, lang });
           }
-          if (!res.data) response.data = res.data;
-          if (typeof res !== 'object' || !res.message) response.data = res;
+
+          if (typeof res !== 'object') {
+            response.data = res;
+          } else {
+            if (res.data) {
+              response.data = res.data;
+            } else {
+              response.data = res;
+            }
+          }
+
           return response;
         } catch (_) {
           response.data = res;

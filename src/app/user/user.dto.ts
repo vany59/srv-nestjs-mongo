@@ -1,39 +1,33 @@
 import { Entity, Column } from 'typeorm';
 import { Expose } from 'class-transformer';
 import { BaseEntity } from '@utils/dto';
-import { IsBoolean, IsPhoneNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsPhoneNumber, IsString, Matches } from 'class-validator';
 
 @Entity({ name: 'user' })
 export class UserEntity extends BaseEntity {
   @Column()
   @Expose()
-  @IsString()
   name: string;
 
   @Column()
   @Expose()
-  @IsString()
   username: string;
 
   @Column()
   @Expose()
-  @IsPhoneNumber()
   phone: string;
 
   @Column()
   @Expose()
-  @IsString()
   password: string;
 
   @Column()
   @Expose()
-  @IsBoolean()
-  isRoot: boolean;
+  isRoot?: boolean;
 
   @Column()
   @Expose()
-  @IsBoolean()
-  isActive: boolean;
+  isActive?: boolean;
 
   constructor(props: Partial<UserEntity>) {
     super(props);
@@ -45,14 +39,20 @@ export class UserEntity extends BaseEntity {
 
 export class Register {
   @IsString()
+  @IsNotEmpty()
   name: string;
 
   @IsString()
+  @IsNotEmpty()
   username: string;
 
-  @IsPhoneNumber()
+  @Matches(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im, {
+    message: 'phone must be a valid phone number',
+  })
+  @IsNotEmpty()
   phone: string;
 
   @IsString()
+  @IsNotEmpty()
   password: string;
 }
