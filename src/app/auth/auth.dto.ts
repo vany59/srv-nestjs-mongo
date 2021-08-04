@@ -1,10 +1,13 @@
-import { BaseEntity } from '@utils/dto';
+import { uuid } from '@utils/uuid';
 import { Expose } from 'class-transformer';
 import { IsNotEmpty, IsString, MinLength } from 'class-validator';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, ObjectIdColumn } from 'typeorm';
 
 @Entity({ name: 'auth' })
-export class AuthEntity extends BaseEntity {
+export class AuthEntity {
+  @ObjectIdColumn()
+  _id?: string;
+
   @Column()
   @IsString()
   userId: string;
@@ -35,8 +38,8 @@ export class AuthEntity extends BaseEntity {
   scope: string;
 
   constructor(props: Partial<AuthEntity>) {
-    super(props);
     Object.assign(this, props);
+    this._id = this._id || uuid();
   }
 }
 
@@ -50,4 +53,10 @@ export class GetToken {
   @IsNotEmpty()
   @MinLength(8)
   password: string;
+}
+
+export class CreateToken {
+  @IsNotEmpty()
+  @IsString()
+  userId: string;
 }

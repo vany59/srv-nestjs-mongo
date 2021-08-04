@@ -33,10 +33,11 @@ const ConfigModule = NestConfigModule.forRoot({
         SCOPE: process.env.SCOPE || 'srv-nestjs-base',
 
         //security
-        ACCESS_EXP: parseInt(process.env.ACCESS_EXP) || 10, // 1 day
-        REFRESH_EXP: parseInt(process.env.REFRESH_EXP) || 54000, // 15 day
+        ACCESS_EXP: parseInt(process.env.ACCESS_EXP) || 86400, // 1 day (seconds)
+        REFRESH_EXP: parseInt(process.env.REFRESH_EXP) || 2592000, // 30 day
         PASSWORD_HASH_SALT: parseInt(process.env.PASSWORD_HASH_SALT) || 11,
         TOKEN_ENCRYPT_SECRET: process.env.TOKEN_ENCRYPT_SECRET || 's3cr3t!@#',
+        AUTH_TYPE: process.env.AUTH_TYPE || 'Bearer',
 
         //database
         DB_HOST: process.env.DB_HOST || 'localhost',

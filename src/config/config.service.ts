@@ -40,10 +40,11 @@ export class ConfigurationService {
 
   public getSecurityConfig() {
     return {
-      accessExp: this.configService.get<number>('ACCESS_EXP'),
-      refreshExp: this.configService.get<number>('REFRESH_EXP'),
+      accessExp: this.configService.get<number>('ACCESS_EXP') * 1000,
+      refreshExp: this.configService.get<number>('REFRESH_EXP') * 1000,
       passwordSalt: this.configService.get('PASSWORD_HASH_SALT'),
       tokenSecret: this.configService.get('TOKEN_ENCRYPT_SECRET'),
+      authType: this.configService.get('AUTH_TYPE'),
     };
   }
 

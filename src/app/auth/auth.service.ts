@@ -5,7 +5,7 @@ import * as bcrypt from 'bcrypt';
 import { ConfigurationService } from '@config/config.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserService } from '@app/user/user.service';
-import { AuthEntity, GetToken } from './auth.dto';
+import { AuthEntity, CreateToken, GetToken } from './auth.dto';
 import { uuid } from '@utils/uuid';
 import { Register } from '@app/user/user.dto';
 
@@ -49,8 +49,34 @@ export class AuthService {
     return {};
   }
 
+  async genToken(body: CreateToken) {
+    const newToken = new AuthEntity({
+      ...body,
+      accessToken: this.getAccessToken(),
+      refreshToken: this.getRefreshToken(),
+      accessTokenExpiresAt: new Date(Date.now() + this.config.accessExp),
+      refreshTokenExpiresAt: new Date(Date.now() + this.config.refreshExp),
+    });
+    return await this.authRepo.save(newToken);
+  }
+
   async register(body: Register) {
     body.password = this.hassPassword(body.password);
-    return await this.userService.save(body);
+    const user = await this.userService.save(body);
+    const {
+      accessToken,
+      refreshToken,
+      accessTokenExpiresAt,
+      refreshTokenExpiresAt,
+    } = await this.genToken({ userId: user._id });
+
+    return {
+      userId: user._id,
+      accessToken,
+      accessTokenExpiresAt,
+      refreshToken,
+      refreshTokenExpiresAt,
+      authType: this.config.authType,
+    };
   }
 }

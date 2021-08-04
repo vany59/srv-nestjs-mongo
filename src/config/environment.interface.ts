@@ -9,6 +9,7 @@ export interface EnvironmentKeys {
   REFRESH_EXP: number;
   PASSWORD_HASH_SALT: number;
   TOKEN_ENCRYPT_SECRET: string;
+  AUTH_TYPE: string;
 
   DB_HOST: string;
   DB_USER: string;
