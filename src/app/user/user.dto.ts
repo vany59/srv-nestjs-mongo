@@ -1,55 +1,58 @@
-import {
-  Entity,
-  Column,
-  PrimaryColumn,
-  ObjectIdColumn,
-  BaseEntity,
-} from 'typeorm';
+import { Entity, Column } from 'typeorm';
 import { Expose } from 'class-transformer';
-import { IsNotEmpty, IsString, MinLength } from 'class-validator';
-import { uuid } from '@utils/uuid';
+import { BaseEntity } from '@utils/dto';
+import { IsBoolean, IsPhoneNumber, IsString } from 'class-validator';
 
-@Entity()
+@Entity({ name: 'user' })
 export class UserEntity extends BaseEntity {
-  @ObjectIdColumn()
-  @Expose()
-  _id: string;
-
   @Column()
   @Expose()
+  @IsString()
   name: string;
 
   @Column()
   @Expose()
+  @IsString()
   username: string;
 
   @Column()
   @Expose()
+  @IsPhoneNumber()
+  phone: string;
+
+  @Column()
+  @Expose()
+  @IsString()
   password: string;
 
   @Column()
   @Expose()
+  @IsBoolean()
   isRoot: boolean;
 
   @Column()
   @Expose()
+  @IsBoolean()
   isActive: boolean;
 
-  @Column()
-  @Expose()
-  isDeleted: boolean;
-
-  @Column()
-  @Expose()
-  createdAt: string;
-
-  @Column()
-  @Expose()
-  updatedAt: string;
-
   constructor(props: Partial<UserEntity>) {
-    super();
+    super(props);
     Object.assign(this, props);
     this.isRoot = this.isRoot || false;
+    this.isActive = this.isActive || true;
   }
+}
+
+export class Register {
+  @IsString()
+  name: string;
+
+  @IsString()
+  username: string;
+
+  @IsPhoneNumber()
+  phone: string;
+
+  @IsString()
+  password: string;
 }

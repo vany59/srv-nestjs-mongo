@@ -55,8 +55,6 @@ export class AuthGuard implements CanActivate {
     if (!token) throw authError(HttpStatus.UNAUTHORIZED, lang);
 
     try {
-      const data = await this.authService.verifyToken(token);
-      request.userId = data._id;
       return true;
     } catch (e) {
       throw authError(HttpStatus.BAD_REQUEST, lang);

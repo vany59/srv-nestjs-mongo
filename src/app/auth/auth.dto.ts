@@ -40,14 +40,6 @@ export class AuthEntity extends BaseEntity {
   }
 }
 
-export class AuthDto {
-  @IsString()
-  id: string;
-
-  @IsString()
-  name: string;
-}
-
 export class GetToken {
   @IsString()
   @IsNotEmpty()
@@ -58,22 +50,4 @@ export class GetToken {
   @IsNotEmpty()
   @MinLength(8)
   password: string;
-}
-
-export class UToken {
-  accessToken: string;
-  refreshToken: string;
-}
-
-export class TokenRes extends UToken {
-  userId: string;
-}
-
-export class Token {
-  @IsString()
-  _id: string;
-
-  @Expose()
-  @IsString()
-  username: string;
 }

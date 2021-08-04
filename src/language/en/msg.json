@@ -1,0 +1,6 @@
+{
+  "user": {
+    "conflict": "user conflict",
+    "notFound": "not found user"
+  }
+}

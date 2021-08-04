@@ -1,69 +1,43 @@
 import { Injectable } from '@nestjs/common';
-import { sign, verify } from 'jsonwebtoken';
-import { compare, hash } from 'bcrypt';
+import { MongoRepository } from 'typeorm';
+import bcrypt from 'bcrypt';
+
 import { ConfigurationService } from '@config/config.service';
-import { GetToken, Token, UToken } from './auth.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { UserService } from '@app/user/user.service';
+
+import { AuthEntity, GetToken } from './auth.dto';
+import { UserEntity } from '@app/user/user.dto';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly configSrv: ConfigurationService) {}
+  constructor(
+    private readonly configSrv: ConfigurationService,
+
+    private readonly userService: UserService,
+
+    @InjectRepository(AuthEntity)
+    private readonly authRepo: MongoRepository<AuthEntity>,
+  ) {}
   config = this.configSrv.getSecurityConfig();
 
-  async verifyToken(token: string): Promise<Token> {
-    return new Promise((resolve, reject) => {
-      verify(token, this.config.tokenSecret, (err, decoded) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(decoded);
-        }
-      });
-    });
+  hassPassword(password: string) {
+    return bcrypt.hashSync(password, this.config.passwordSalt);
   }
 
-  createToken(data: Token): UToken {
-    return {
-      accessToken: sign(
-        {
-          data,
-        },
-        this.config.tokenSecret,
-        { expiresIn: this.config.accessExp },
-      ),
-      refreshToken: sign(
-        {
-          data,
-        },
-        this.config.tokenSecret,
-        { expiresIn: this.config.refreshExp },
-      ),
-    };
+  comparePassword(password: string, hashPassword: string) {
+    return bcrypt.compareSync(password, hashPassword);
   }
 
-  async hashPassword(password: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-      hash(password, this.config.passwordSalt, (err, hashString) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(hashString);
-        }
-      });
+  async getToken(body: GetToken) {
+    const { username, password } = body;
+    const user = await this.userService.findOne({
+      username,
     });
-  }
-
-  async comparePassword(
-    password: string,
-    hashPassword: string,
-  ): Promise<boolean> {
-    return new Promise((resolve, reject) => {
-      compare(password, hashPassword, (err, result) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(result);
-        }
-      });
-    });
+    if (!user)
+      return {
+        code: 401,
+      };
+    return {};
   }
 }

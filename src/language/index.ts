@@ -1,9 +1,11 @@
 import * as enCode from './en/code.json';
 import * as viCode from './vi/code.json';
+import * as enMsg from './en/msg.json';
+import * as viMsg from './vi/msg.json';
 
 const language = {
-  en: enCode,
-  vi: viCode,
+  en: { ...enCode, ...enMsg },
+  vi: { ...viCode, ...viMsg },
 };
 
 export default function langTransformer({

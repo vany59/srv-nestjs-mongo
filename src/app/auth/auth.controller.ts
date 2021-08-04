@@ -1,26 +1,19 @@
+import { Register } from '@app/user/user.dto';
 import { Body, Controller, Post } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MongoRepository } from 'typeorm';
-import { AuthEntity, GetToken, Token } from './auth.dto';
+import { AuthEntity, GetToken } from './auth.dto';
+import { AuthService } from './auth.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(
-    @InjectRepository(AuthEntity)
-    private readonly authRepo: MongoRepository<AuthEntity>,
-  ) {}
+  constructor(private readonly authService: AuthService) {}
 
-  @Post('oauth2/token')
+  @Post('/token')
   async token(@Body() body: GetToken) {
-    return {
-      token: '',
-    };
+    await this.authService.getToken(body);
   }
 
-  @Post('register')
-  async register() {
-    return {
-      register: '',
-    };
-  }
+  @Post('/register')
+  async register(@Body() body: Register) {}
 }
