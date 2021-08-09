@@ -9,7 +9,7 @@ export class AuthController {
 
   @Post('/token')
   async token(@Body() body: GetToken) {
-    await this.authService.getToken(body);
+    return await this.authService.getToken(body);
   }
 
   @Post('/register')

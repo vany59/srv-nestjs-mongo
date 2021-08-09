@@ -1,0 +1,16 @@
+export const VI = 'vi';
+export const PAGE = 1;
+export const LIMIT = 25;
+export const DESC = -1;
+export const ASC = 1;
+export const EQ = 'eq';
+export const NE = 'ne';
+export const LT = 'lt';
+export const GT = 'gt';
+export const LTE = 'lte';
+export const GTE = 'gte';
+export const LIKE = 'like';
+export const IN = 'in';
+export const NIN = 'nin';
+export const RANGE_NUMBER = 'range_number';
+export const RANGE_DATE = 'range_date';

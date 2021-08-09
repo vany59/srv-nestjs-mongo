@@ -39,13 +39,15 @@ export class ResponseInterceptor implements NestInterceptor {
             response.message = langTransformer({ query: `code.${code}`, lang });
           }
 
-          if (typeof res !== 'object') {
-            response.data = res;
-          } else {
-            if (res.data) {
-              response.data = res.data;
-            } else {
+          if (response.code === 200) {
+            if (typeof res !== 'object') {
               response.data = res;
+            } else {
+              if (res.data) {
+                response.data = res.data;
+              } else {
+                response.data = res;
+              }
             }
           }
 

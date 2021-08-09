@@ -1,51 +1,33 @@
-import { Expose } from 'class-transformer';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { IsNotEmpty, IsString } from 'class-validator';
-import { Column, ObjectIdColumn } from 'typeorm';
 import { uuid } from './uuid';
 
 export class IdDto {
-  @Expose()
   @IsString()
   @IsNotEmpty()
   id: string;
 }
-export abstract class BaseEntity {
-  @ObjectIdColumn()
-  @Expose()
-  _id?: string;
 
-  @Column()
-  @Expose()
+@Schema()
+export class Base {
+  _id: string;
+
+  @Prop({ default: new Date(), type: Date })
   createdAt?: Date;
 
-  @Column()
-  @Expose()
+  @Prop({ default: new Date(), type: Date })
   createdBy?: string;
 
-  @Column()
-  @Expose()
+  @Prop({ default: new Date(), type: Date })
   updatedAt?: Date;
 
-  @Column()
-  @Expose()
+  @Prop()
   updatedBy?: string;
 
-  @Column()
-  @Expose()
+  @Prop({ type: Boolean, default: false })
   isDeleted?: boolean;
 
-  @Column()
-  @Expose()
+  @Prop()
   deletedBy?: string;
-
-  constructor(props: Partial<BaseEntity>) {
-    Object.assign(this, props);
-    this._id = this._id || uuid();
-    this.isDeleted = this.isDeleted || false;
-    this.createdAt = this.createdAt || new Date();
-    this.createdBy = this.createdBy || 'system';
-    this.updatedAt = new Date();
-    this.updatedBy = this.updatedBy || 'system';
-    this.deletedBy = this.deletedBy || '';
-  }
 }
+export const BaseSchema = SchemaFactory.createForClass(Base);

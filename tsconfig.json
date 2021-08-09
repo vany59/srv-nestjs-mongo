@@ -16,7 +16,8 @@
       "@config/*": ["./src/config/*"],
       "@app/*": ["./src/app/*"],
       "@utils/*": ["./src/utils/*"],
-      "@decorator": ["./src/decorator"]
+      "@decorator": ["./src/decorator"],
+      "@cache/*": ["./src/cache/*"]
     }
   },
   "include": ["src"],

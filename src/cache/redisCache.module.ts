@@ -19,6 +19,6 @@ import { RedisCacheService } from './redisCache.service';
     }),
   ],
   providers: [RedisCacheService],
-  exports: [RedisCacheService], // This is IMPORTANT,  you need to export RedisCacheService here so that other modules can use it
+  exports: [RedisCacheService],
 })
 export class RedisCacheModule {}

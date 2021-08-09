@@ -1,6 +1,7 @@
 {
   "user": {
     "conflict": "người dùng đã tồn tại",
-    "notFound": "không tìm thấy người dùng"
+    "notFound": "không tìm thấy người dùng",
+    "loginFail": "đăng nhập thất bại"
   }
 }

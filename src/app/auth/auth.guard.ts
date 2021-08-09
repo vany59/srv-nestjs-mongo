@@ -6,8 +6,10 @@ import {
   Inject,
   HttpException,
   HttpStatus,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { RedisCacheService } from '@cache/redisCache.service';
 import langTransformer from 'src/language';
 import { AuthService } from './auth.service';
 
@@ -30,7 +32,10 @@ export class AuthGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
 
-    @Inject('AuthService') private readonly authService: AuthService,
+    @Inject('AuthService')
+    private readonly authService: AuthService,
+
+    private readonly cacheService: RedisCacheService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -47,17 +52,26 @@ export class AuthGuard implements CanActivate {
 
     const request = context.switchToHttp().getRequest();
     const lang = request.headers['accept-language'];
+
     const { authorization } = request.headers;
     if (!(authorization && authorization.startsWith('Bearer ')))
-      throw authError(HttpStatus.UNAUTHORIZED, lang);
+      throw authError(401, lang);
 
     const token = authorization.replace('Bearer ', '');
     if (!token) throw authError(HttpStatus.UNAUTHORIZED, lang);
 
-    try {
+    //find token in cache
+    const userCache = await this.cacheService.get(`user${token}`);
+    if (userCache) return true;
+
+    //find token in database
+    console.log('check token');
+    const checkToken = await this.authService.checkAccessToken(token);
+    console.log(checkToken);
+    if (checkToken) {
+      await this.cacheService.set(`user${token}`, token);
       return true;
-    } catch (e) {
-      throw authError(HttpStatus.BAD_REQUEST, lang);
     }
+    throw authError(HttpStatus.UNAUTHORIZED, lang);
   }
 }

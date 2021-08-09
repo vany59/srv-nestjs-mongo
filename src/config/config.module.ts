@@ -53,7 +53,7 @@ const ConfigModule = NestConfigModule.forRoot({
         REDIS_HOST: process.env.REDIS_HOST || 'localhost',
         REDIS_PASS: process.env.REDIS_PASS || '123456',
         REDIS_PORT: parseInt(process.env.REDIS_PORT) || 6379,
-        CACHE_TTL: parseInt(process.env.CACHE_TTL) || 3600,
+        CACHE_TTL: parseInt(process.env.CACHE_TTL) || 3600, //1hour
 
         //seeding
         ROOT_USER: process.env.ROOT_USER || 'root',

@@ -1,41 +1,36 @@
-import { Entity, Column } from 'typeorm';
-import { Expose } from 'class-transformer';
-import { BaseEntity } from '@utils/dto';
-import { IsNotEmpty, IsPhoneNumber, IsString, Matches } from 'class-validator';
+import { IsNotEmpty, IsString, Matches } from 'class-validator';
+import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
+import { BaseSchema, Base } from '@utils/dto';
 
-@Entity({ name: 'user' })
-export class UserEntity extends BaseEntity {
-  @Column()
-  @Expose()
+export type UserDocument = User & Document;
+@Schema({ collection: 'user' })
+export class User extends Base {
+  @Prop()
   name: string;
 
-  @Column()
-  @Expose()
+  @Prop()
   username: string;
 
-  @Column()
-  @Expose()
+  @Prop()
   phone: string;
 
-  @Column()
-  @Expose()
+  @Prop()
   password: string;
 
-  @Column()
-  @Expose()
+  @Prop({ type: 'boolean', default: false })
   isRoot?: boolean;
 
-  @Column()
-  @Expose()
+  @Prop({ type: 'boolean', default: true })
   isActive?: boolean;
-
-  constructor(props: Partial<UserEntity>) {
-    super(props);
-    Object.assign(this, props);
-    this.isRoot = this.isRoot || false;
-    this.isActive = this.isActive || true;
-  }
 }
+
+export const UserSchema = SchemaFactory.createForClass(User);
+UserSchema.add(BaseSchema);
+UserSchema.index({ phone: 1, username: 1 }, { unique: true });
+UserSchema.index(
+  { phone: 'text', username: 'text', email: 'text', name: 'text' },
+  { name: 'search' },
+);
 
 export class Register {
   @IsString()
