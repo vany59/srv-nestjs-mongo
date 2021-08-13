@@ -47,7 +47,9 @@ const ConfigModule = NestConfigModule.forRoot({
         DB_DATABASE: process.env.DB_DATABASE || 'pjcore',
 
         //upload
-        UPLOAD_DEST: process.env.UPLOAD_DEST || 'uploads',
+        UPLOAD_BUCKET_NAME: process.env.UPLOAD_DEST || 'uploads',
+        MAX_IMAGE_SIZE: parseInt(process.env.MAX_IMAGE_SIZE) || 5000000,
+        MAX_VIDEO_SIZE: parseInt(process.env.MAX_VIDEO_SIZE) || 5000000,
 
         //redis cache
         REDIS_HOST: process.env.REDIS_HOST || 'localhost',

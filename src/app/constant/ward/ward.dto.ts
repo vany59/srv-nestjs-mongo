@@ -1,25 +1,15 @@
-import { uuid } from '@utils/uuid';
-import { Expose } from 'class-transformer';
-import { IsString } from 'class-validator';
-import { Column, Entity, Index, ObjectIdColumn } from 'typeorm';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
-@Entity({ name: 'ward' })
-export class WardEntity {
-  @ObjectIdColumn({ default: uuid() })
-  @Expose()
-  _id: string;
-
-  @Column()
-  @IsString()
-  @Index({ fulltext: true })
+export type WardDocument = Ward & Document;
+@Schema()
+export class Ward {
+  @Prop()
   name: string;
 
-  @Column()
-  @Expose()
-  @IsString()
+  @Prop()
   district: string;
-
-  constructor(props: Partial<WardEntity>) {
-    Object.assign(this, props);
-  }
 }
+
+export const WardSchema = SchemaFactory.createForClass(Ward);
+WardSchema.index({ district: 1 });
+WardSchema.index({ name: 'text' }, { name: 'search' });

@@ -16,7 +16,9 @@ export interface EnvironmentKeys {
   DB_PORT: number;
   DB_PASSWORD: string;
   DB_DATABASE: string;
-  UPLOAD_DEST: string;
+  UPLOAD_BUCKET_NAME: string;
+  MAX_IMAGE_SIZE: number;
+  MAX_VIDEO_SIZE: number;
 
   REDIS_HOST: string;
   REDIS_PORT: number;

@@ -1,25 +1,14 @@
-import { uuid } from '@utils/uuid';
-import { Expose } from 'class-transformer';
-import { IsBoolean, IsString } from 'class-validator';
-import { Column, Entity, Index, ObjectIdColumn } from 'typeorm';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
-@Entity({ name: 'province' })
-export class ProvinceEntity {
-  @ObjectIdColumn({ default: uuid() })
-  @Expose()
-  _id: string;
-
-  @Column()
-  @IsString()
-  @Index({ fulltext: true })
+export type ProvinceDocument = Province & Document;
+@Schema({ collection: 'province' })
+export class Province {
+  @Prop()
   name: string;
 
-  @Column()
-  @Expose()
-  @IsBoolean()
+  @Prop({ type: Boolean })
   isCity: boolean;
-
-  constructor(props: Partial<ProvinceEntity>) {
-    Object.assign(this, props);
-  }
 }
+export const ProvinceSchema = SchemaFactory.createForClass(Province);
+ProvinceSchema.index({ isCity: 1 });
+ProvinceSchema.index({ name: 'text' }, { name: 'search' });

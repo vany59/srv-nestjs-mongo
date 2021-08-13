@@ -34,8 +34,12 @@ export class ConfigurationService {
     };
   }
 
-  public getUploadDest() {
-    return this.configService.get('UPLOAD_DEST');
+  public getUploadConfig() {
+    return {
+      uploadBucketName: this.configService.get('UPLOAD_BUCKET_NAME'),
+      maxImageSize: this.configService.get('MAX_IMAGE_SIZE'),
+      maxVideoSize: this.configService.get('MAX_VIDEO_SIZE'),
+    };
   }
 
   public getSecurityConfig() {
