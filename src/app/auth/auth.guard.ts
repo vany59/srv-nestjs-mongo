@@ -65,7 +65,6 @@ export class AuthGuard implements CanActivate {
     if (userCache) return true;
 
     //find token in database
-    console.log('check token');
     const checkToken = await this.authService.checkAccessToken(token);
     console.log(checkToken);
     if (checkToken) {
