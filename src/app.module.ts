@@ -4,7 +4,7 @@ import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { AppService } from './app.service';
 
 import ConfigurationModule from './config/config.module';
-import { DatabaseModule } from './database/database.module';
+import { DatabaseModule, ESModule } from './database/database.module';
 
 import { RedisCacheModule } from './cache/redisCache.module';
 
@@ -19,6 +19,7 @@ import * as App from './app';
     ConfigurationModule,
     RedisCacheModule,
     DatabaseModule,
+    ESModule,
     ...Object.values(App),
   ],
   providers: [

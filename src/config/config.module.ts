@@ -46,6 +46,9 @@ const ConfigModule = NestConfigModule.forRoot({
         DB_PORT: parseInt(process.env.DB_PORT) || 27017,
         DB_DATABASE: process.env.DB_DATABASE || 'pjcore',
 
+        //elasticsearch
+        ES_HOST: process.env.ES_HOST || 'http://localhost:9200',
+
         //upload
         UPLOAD_BUCKET_NAME: process.env.UPLOAD_DEST || 'uploads',
         MAX_IMAGE_SIZE: parseInt(process.env.MAX_IMAGE_SIZE) || 5000000,

@@ -1,4 +1,5 @@
 import { ConfigurationService } from '@config/config.service';
+import { ElasticsearchModule } from '@nestjs/elasticsearch';
 import { MongooseModule } from '@nestjs/mongoose';
 
 const DatabaseModule = MongooseModule.forRootAsync({
@@ -15,4 +16,15 @@ const DatabaseModule = MongooseModule.forRootAsync({
   },
   inject: [ConfigurationService],
 });
-export { DatabaseModule };
+
+const ESModule = ElasticsearchModule.registerAsync({
+  imports: [ConfigurationService],
+  useFactory: async (configService: ConfigurationService) => {
+    const { host } = configService.getESConfig();
+    return {
+      node: host,
+    };
+  },
+  inject: [ConfigurationService],
+});
+export { DatabaseModule, ESModule };

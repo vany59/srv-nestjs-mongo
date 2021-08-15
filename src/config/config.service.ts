@@ -34,6 +34,12 @@ export class ConfigurationService {
     };
   }
 
+  public getESConfig() {
+    return {
+      host: this.configService.get('ES_HOST'),
+    };
+  }
+
   public getUploadConfig() {
     return {
       uploadBucketName: this.configService.get('UPLOAD_BUCKET_NAME'),

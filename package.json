@@ -22,9 +22,11 @@
     "db:seed": "ts-node -r tsconfig-paths/register ./src/seeding/seed.ts"
   },
   "dependencies": {
+    "@elastic/elasticsearch": "^7.14.0",
     "@nestjs/common": "^7.6.15",
     "@nestjs/config": "^0.6.3",
     "@nestjs/core": "^7.6.15",
+    "@nestjs/elasticsearch": "^8.0.0",
     "@nestjs/mongoose": "^7.2.4",
     "@nestjs/platform-express": "^7.6.15",
     "bcrypt": "^5.0.1",

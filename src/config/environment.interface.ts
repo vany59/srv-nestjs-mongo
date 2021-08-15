@@ -20,6 +20,8 @@ export interface EnvironmentKeys {
   MAX_IMAGE_SIZE: number;
   MAX_VIDEO_SIZE: number;
 
+  ES_HOST: string;
+
   REDIS_HOST: string;
   REDIS_PORT: number;
   REDIS_PASS: string;
