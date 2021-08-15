@@ -32,6 +32,12 @@
 $ npm install
 ```
 
+## Seeding database
+
+```bash
+$ npm run db:seed
+```
+
 ## Running the app
 
 ```bash

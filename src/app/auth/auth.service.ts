@@ -11,7 +11,13 @@ import { RedisCacheService } from '@cache/redisCache.service';
 import { filter } from '@utils/shared';
 import { GTE } from '@utils/enum';
 
-import { Auth, AuthDocument, CreateToken, GetToken } from './auth.dto';
+import {
+  Auth,
+  AuthDocument,
+  AuthToken,
+  CreateToken,
+  GetToken,
+} from './auth.dto';
 
 @Injectable()
 export class AuthService {
@@ -38,11 +44,12 @@ export class AuthService {
   getAccessToken() {
     return uuid();
   }
+
   getRefreshToken() {
     return uuid();
   }
 
-  async checkAccessToken(accessToken: string) {
+  async checkAccessToken(accessToken: string): Promise<AuthToken> {
     const body = filter({
       filters: [
         { key: 'accessToken', value: accessToken },
@@ -51,14 +58,28 @@ export class AuthService {
     });
     const auth = await this.authModel.findOne(body.query);
     if (!auth) return null;
+
+    const user = await this.userService.findOne({ _id: auth.userId });
+    if (!user) return null;
+
+    this.authModel.updateOne(
+      { _id: auth._id },
+      {
+        $set: {
+          accessTokenExpiresAt: new Date(Date.now() + this.config.accessExp),
+          refreshTokenExpiresAt: new Date(Date.now() + this.config.refreshExp),
+        },
+      },
+    );
+
     return {
-      userId: auth.userId,
+      userId: user._id,
+      isRoot: user.isRoot,
       accessToken: auth.accessToken,
       refreshToken: auth.refreshToken,
       accessTokenExpiresAt: auth.accessTokenExpiresAt,
       refreshTokenExpiresAt: auth.refreshTokenExpiresAt,
-      _id: auth._id,
-      authType: 'Bearer',
+      authType: auth.authType,
     };
   }
 
@@ -89,6 +110,7 @@ export class AuthService {
       refreshToken: this.getRefreshToken(),
       accessTokenExpiresAt: new Date(Date.now() + this.config.accessExp),
       refreshTokenExpiresAt: new Date(Date.now() + this.config.refreshExp),
+      tokenType: this.config.authType,
     };
 
     if (auth) {
@@ -112,8 +134,9 @@ export class AuthService {
       refreshTokenExpiresAt,
     } = await this.genToken({ userId: user._id });
 
-    const res = {
+    const res: AuthToken = {
       userId: user._id,
+      isRoot: user.isRoot,
       accessToken,
       accessTokenExpiresAt,
       refreshToken,

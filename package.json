@@ -1,8 +1,8 @@
 {
-  "name": "filemanager-be",
+  "name": "srv-nestjs-mongo",
   "version": "0.0.1",
   "description": "",
-  "author": "",
+  "author": "VANYLE",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {

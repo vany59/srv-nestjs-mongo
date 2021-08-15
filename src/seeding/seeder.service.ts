@@ -17,6 +17,8 @@ import { Ward, WardDocument } from '@app/constant/ward/ward.dto';
 import { Province as dbProvince } from './db/province';
 import { District as dbDistrict } from './db/district';
 import { Ward as dbWard } from './db/ward';
+import { User, UserDocument } from '@app/user/user.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class SeederService {
@@ -30,6 +32,9 @@ export class SeederService {
     @InjectModel(Ward.name)
     private readonly WardModel: Model<WardDocument>,
 
+    @InjectModel(User.name)
+    private readonly UserModel: Model<UserDocument>,
+
     private readonly configService: ConfigurationService,
   ) {}
 
@@ -38,6 +43,17 @@ export class SeederService {
       this.ProvinceModel.insertMany(dbProvince),
       this.DistrictModel.insertMany(dbDistrict),
       this.WardModel.insertMany(dbWard),
+
+      this.UserModel.insertMany([
+        {
+          name: this.configService.getSeeding().rootUser,
+          password: bcrypt.hashSync(
+            this.configService.getSeeding().rootPassword,
+            this.configService.getPasswordHashSalt(),
+          ),
+          isRoot: true,
+        },
+      ]),
     ]);
     return;
   }

@@ -22,6 +22,9 @@ export class Auth extends Base {
 
   @Prop()
   scope: string;
+
+  @Prop()
+  authType: string;
 }
 export const AuthSchema = SchemaFactory.createForClass(Auth);
 AuthSchema.add(BaseSchema);
@@ -40,4 +43,14 @@ export class CreateToken {
   @IsNotEmpty()
   @IsString()
   userId: string;
+}
+
+export interface AuthToken {
+  userId: string;
+  isRoot: boolean;
+  accessToken: string;
+  refreshToken: string;
+  accessTokenExpiresAt: Date;
+  refreshTokenExpiresAt: Date;
+  authType: string;
 }
