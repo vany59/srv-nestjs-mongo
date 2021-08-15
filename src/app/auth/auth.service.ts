@@ -9,7 +9,7 @@ import { uuid } from '@utils/uuid';
 import { Register } from '@app/user/user.dto';
 import { RedisCacheService } from '@cache/redisCache.service';
 import { filter } from '@utils/shared';
-import { LT } from '@utils/enum';
+import { GTE } from '@utils/enum';
 
 import { Auth, AuthDocument, CreateToken, GetToken } from './auth.dto';
 
@@ -46,11 +46,20 @@ export class AuthService {
     const body = filter({
       filters: [
         { key: 'accessToken', value: accessToken },
-        { key: 'accessTokenExpiresAt', value: new Date(), operator: LT },
+        { key: 'accessTokenExpiresAt', value: new Date(), operator: GTE },
       ],
     });
     const auth = await this.authModel.findOne(body.query);
-    return !!auth;
+    if (!auth) return null;
+    return {
+      userId: auth.userId,
+      accessToken: auth.accessToken,
+      refreshToken: auth.refreshToken,
+      accessTokenExpiresAt: auth.accessTokenExpiresAt,
+      refreshTokenExpiresAt: auth.refreshTokenExpiresAt,
+      _id: auth._id,
+      authType: 'Bearer',
+    };
   }
 
   async getToken(body: GetToken) {

@@ -62,13 +62,15 @@ export class AuthGuard implements CanActivate {
 
     //find token in cache
     const userCache = await this.cacheService.get(`user${token}`);
-    if (userCache) return true;
+    if (userCache) {
+      request.user = userCache;
+      return true;
+    }
 
     //find token in database
     const checkToken = await this.authService.checkAccessToken(token);
-    console.log(checkToken);
     if (checkToken) {
-      await this.cacheService.set(`user${token}`, token);
+      await this.cacheService.set(`user${token}`, checkToken);
       return true;
     }
     throw authError(HttpStatus.UNAUTHORIZED, lang);
