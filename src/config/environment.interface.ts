@@ -7,7 +7,6 @@ export interface EnvironmentKeys {
 
   ACCESS_EXP: number;
   REFRESH_EXP: number;
-  PASSWORD_HASH_SALT: number;
   TOKEN_ENCRYPT_SECRET: string;
   AUTH_TYPE: string;
 

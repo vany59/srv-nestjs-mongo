@@ -18,7 +18,7 @@ import { Province as dbProvince } from './db/province';
 import { District as dbDistrict } from './db/district';
 import { Ward as dbWard } from './db/ward';
 import { User, UserDocument } from '@app/user/user.dto';
-import * as bcrypt from 'bcrypt';
+import { hash } from '@utils/shared';
 
 @Injectable()
 export class SeederService {
@@ -47,9 +47,9 @@ export class SeederService {
       this.UserModel.insertMany([
         {
           name: this.configService.getSeeding().rootUser,
-          password: bcrypt.hashSync(
+          passwoord: await hash(
             this.configService.getSeeding().rootPassword,
-            this.configService.getPasswordHashSalt(),
+            this.configService.getTokenEncryptSecret(),
           ),
           isRoot: true,
         },

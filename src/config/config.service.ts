@@ -52,14 +52,9 @@ export class ConfigurationService {
     return {
       accessExp: this.configService.get<number>('ACCESS_EXP') * 1000,
       refreshExp: this.configService.get<number>('REFRESH_EXP') * 1000,
-      passwordSalt: this.configService.get('PASSWORD_HASH_SALT'),
       tokenSecret: this.configService.get('TOKEN_ENCRYPT_SECRET'),
       authType: this.configService.get('AUTH_TYPE'),
     };
-  }
-
-  public getPasswordHashSalt() {
-    return this.configService.get<number>('PASSWORD_HASH_SALT');
   }
 
   public getTokenEncryptSecret() {

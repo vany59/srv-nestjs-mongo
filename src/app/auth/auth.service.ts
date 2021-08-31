@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 
@@ -8,7 +7,7 @@ import { UserService } from '@app/user/user.service';
 import { uuid } from '@utils/uuid';
 import { Register } from '@app/user/user.dto';
 import { RedisCacheService } from '@cache/redisCache.service';
-import { filter } from '@utils/shared';
+import { compare, filter, hash } from '@utils/shared';
 import { GTE } from '@utils/enum';
 
 import {
@@ -33,12 +32,12 @@ export class AuthService {
   ) {}
   config = this.configSrv.getSecurityConfig();
 
-  hassPassword(password: string) {
-    return bcrypt.hashSync(password, this.config.passwordSalt);
+  async hassPassword(password: string) {
+    return await hash(password, this.config.tokenSecret);
   }
 
-  comparePassword(password: string, hashPassword: string) {
-    return bcrypt.compareSync(password, hashPassword);
+  async comparePassword(password: string, hashPassword: string) {
+    return await compare(password, hashPassword, this.config.tokenSecret);
   }
 
   getAccessToken() {
@@ -89,7 +88,7 @@ export class AuthService {
       username,
     });
 
-    if (!user || !this.comparePassword(password, user.password))
+    if (!user || !(await this.comparePassword(password, user.password)))
       return {
         code: 401,
         messgage: 'user.loginFail',
@@ -125,7 +124,7 @@ export class AuthService {
   }
 
   async register(body: Register) {
-    body.password = this.hassPassword(body.password);
+    body.password = await this.hassPassword(body.password);
     const user = await this.userService.save(body);
     const {
       accessToken,

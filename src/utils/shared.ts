@@ -1,3 +1,4 @@
+import * as crypto from 'crypto';
 import {
   PAGE,
   LIMIT,
@@ -117,4 +118,32 @@ export const filter = ({
   delete body.sorts;
   delete body.filters;
   return body;
+};
+
+export const hash = (data: string, secret: string): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    try {
+      const hash = crypto
+        .createHmac('sha256', secret)
+        .update(data)
+        .digest('hex');
+      resolve(hash);
+    } catch (er) {
+      reject(er);
+    }
+  });
+};
+export const compare = (
+  data: string,
+  hashed: string,
+  secret: string,
+): Promise<boolean> => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const dhs = await hash(data, secret);
+      resolve(dhs === hashed);
+    } catch (er) {
+      reject(er);
+    }
+  });
 };
