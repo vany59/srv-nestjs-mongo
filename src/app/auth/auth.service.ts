@@ -82,19 +82,20 @@ export class AuthService {
     };
   }
 
-  async getToken(body: GetToken) {
+  async getToken(body: GetToken): Promise<AuthToken> {
     const { username, password } = body;
     const user = await this.userService.findOne({
       username,
     });
 
     if (!user || !(await this.comparePassword(password, user.password)))
-      return {
+      throw {
         code: 401,
-        messgage: 'user.loginFail',
+        message: 'user.loginFail',
       };
     const auth = await this.genToken({ userId: user._id });
-    const res = { ...auth, authType: this.config.authType };
+
+    const res = { ...auth, isRoot: user.isRoot };
 
     this.cacheService.set(`user${auth.accessToken}`, res);
 
@@ -109,7 +110,7 @@ export class AuthService {
       refreshToken: this.getRefreshToken(),
       accessTokenExpiresAt: new Date(Date.now() + this.config.accessExp),
       refreshTokenExpiresAt: new Date(Date.now() + this.config.refreshExp),
-      tokenType: this.config.authType,
+      authType: this.config.authType,
     };
 
     if (auth) {
@@ -123,7 +124,7 @@ export class AuthService {
     }
   }
 
-  async register(body: Register) {
+  async register(body: Register): Promise<AuthToken> {
     body.password = await this.hassPassword(body.password);
     const user = await this.userService.save(body);
     const {

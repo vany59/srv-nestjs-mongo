@@ -6,7 +6,6 @@ import {
   Inject,
   HttpException,
   HttpStatus,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { RedisCacheService } from '@cache/redisCache.service';
@@ -43,6 +42,7 @@ export class AuthGuard implements CanActivate {
       'auth',
       context.getHandler(),
     );
+    console.log(requiredAuth);
 
     const logger = new Logger('Guard');
 

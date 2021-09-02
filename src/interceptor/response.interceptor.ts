@@ -22,67 +22,40 @@ export class ResponseInterceptor implements NestInterceptor {
     res.status(200);
     const lang = http.getRequest().headers['accept-language'];
 
-    const response: ResSchema = {
-      code: 200,
-      message: null,
-      data: null,
+    const formatData = (value, type): ResSchema => {
+      if (
+        value.hasOwnProperty('code') ||
+        value.hasOwnProperty('statusCode') ||
+        value.hasOwnProperty('status')
+      ) {
+        const code =
+          value.code ||
+          value.statusCode ||
+          value.status ||
+          (type === 'return' ? 200 : 500);
+        return {
+          code,
+          message: value.messgage
+            ? langTransformer({ query: value.message, lang })
+            : langTransformer({ query: `code.${code}`, lang }),
+          data: value.data || null,
+        };
+      }
+
+      const code = type === 'return' ? 200 : 500;
+      return {
+        code,
+        message: langTransformer({ query: `code.${code}`, lang }),
+        data: value,
+      };
     };
 
     return next.handle().pipe(
       map((res) => {
-        try {
-          const code = res.code || res.statusCode || 200;
-          response.code = code;
-          if (res.message) {
-            response.message = langTransformer({ query: res.message, lang });
-          } else {
-            response.message = langTransformer({ query: `code.${code}`, lang });
-          }
-
-          if (response.code === 200) {
-            if (typeof res !== 'object') {
-              response.data = res;
-            } else {
-              if (res.data) {
-                response.data = res.data;
-              } else {
-                response.data = res;
-              }
-            }
-          }
-
-          return response;
-        } catch (_) {
-          response.data = res;
-          response.code = 200;
-          response.message = langTransformer({ query: `code.200`, lang });
-          return response;
-        }
+        return formatData(res, 'return');
       }),
       catchError((error) => {
-        try {
-          const code = error.code || error.status || 500;
-          let message = '';
-          if (error.message) {
-            message =
-              langTransformer({ query: error.message, lang }) || error.message;
-          } else if (error) {
-            message = langTransformer({ query: error, lang });
-          } else {
-            message = langTransformer({ query: `code.${code}`, lang });
-          }
-          return of({
-            code,
-            message,
-            data: null,
-          });
-        } catch (_) {
-          return of({
-            code: 500,
-            message: langTransformer({ query: `code.500`, lang }),
-            data: null,
-          });
-        }
+        return of(formatData(error, 'throw'));
       }),
     );
   }

@@ -4,7 +4,13 @@ import {
   SetMetadata,
 } from '@nestjs/common';
 
-export const Auth = () => SetMetadata('auth', true);
+interface Role {
+  mission: string;
+  privilege: string;
+}
+
+export const Auth = (roles?: Role[]) =>
+  SetMetadata('auth', roles && roles.length ? roles : true);
 
 export const UserId = createParamDecorator(
   (_: unknown, ctx: ExecutionContext) => {
