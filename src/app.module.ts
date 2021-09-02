@@ -1,8 +1,6 @@
 import { Module } from '@nestjs/common';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 
-import { AppService } from './app.service';
-
 import ConfigurationModule from './config/config.module';
 import { DatabaseModule, ESModule } from './database/database.module';
 
@@ -23,7 +21,6 @@ import * as App from './app';
     ...Object.values(App),
   ],
   providers: [
-    AppService,
     {
       provide: APP_GUARD,
       useClass: AuthGuard,

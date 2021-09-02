@@ -12,6 +12,7 @@ async function bootstrap() {
         console.log('database seeding successfully!');
         process.exit();
       } catch (e) {
+        console.error(e);
         console.error('database seeding error!');
         process.exit(1);
       }
